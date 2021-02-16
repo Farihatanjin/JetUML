@@ -65,20 +65,20 @@ public class SequenceDiagramBuilder extends DiagramBuilder
 	}
 	
 	@Override
-	protected ConstraintSet getAdditionalEdgeConstraints(Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint)
+	protected void getAdditionalEdgeConstraints()
 	{
-		ConstraintSet constraintSet = new ConstraintSet(
-				EdgeConstraints.maxEdges(pEdge, pStart, pEnd, aDiagram, 1),
-				SequenceDiagramEdgeConstraints.noEdgesFromParameterTop(pStart, pStartPoint),
-				SequenceDiagramEdgeConstraints.returnEdge(pEdge, pStart, pEnd, aDiagram),
-				SequenceDiagramEdgeConstraints.singleEntryPoint(pEdge, pStart, aDiagram)
+		constraints.add(
+				EdgeConstraints.maxEdges(aDiagram, 1),
+				SequenceDiagramEdgeConstraints.noEdgesFromParameterTop(),
+				SequenceDiagramEdgeConstraints.returnEdge(aDiagram),
+				SequenceDiagramEdgeConstraints.singleEntryPoint(aDiagram)
 			);
-		if( !canCreateConstructorCall(pStartPoint, pEndPoint) )
-		{
+//		if( !canCreateConstructorCall(pStartPoint, pEndPoint) )
+	//	{
 			// The edge could not land on the top rectangle of ImplicitParameterNode if cannot create constructor call
-			constraintSet.merge( new ConstraintSet(SequenceDiagramEdgeConstraints.callEdgeEnd(pEdge, pEnd, pEndPoint)) );
-		}
-		return constraintSet;
+//			constraintSet.merge( new ConstraintSet(SequenceDiagramEdgeConstraints.callEdgeEnd(pEdge, pEnd, pEndPoint)) );
+//		}
+//		return constraintSet;
 	}
 	
 	/**

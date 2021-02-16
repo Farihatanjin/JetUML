@@ -53,12 +53,12 @@ public class ObjectDiagramBuilder extends DiagramBuilder
 	}
 	
 	@Override
-	protected ConstraintSet getAdditionalEdgeConstraints(Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint)
+	protected void getAdditionalEdgeConstraints()
 	{
-		return new ConstraintSet(
-			EdgeConstraints.maxEdges(pEdge, pStart, pEnd, aDiagram, 1),
-			ObjectDiagramEdgeConstraints.collaboration(pEdge, pStart, pEnd),
-			ObjectDiagramEdgeConstraints.reference(pEdge, pStart, pEnd)
+		constraints.add(
+			EdgeConstraints.maxEdges(aDiagram, 1),
+			ObjectDiagramEdgeConstraints.collaboration(),
+			ObjectDiagramEdgeConstraints.reference()
 		);
 	}
 	

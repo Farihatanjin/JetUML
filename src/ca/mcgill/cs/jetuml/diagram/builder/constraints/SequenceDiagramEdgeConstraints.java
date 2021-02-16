@@ -45,9 +45,9 @@ public final class SequenceDiagramEdgeConstraints
 	/*
 	 * No edge is allowed to start in a parameter node.
 	 */
-	public static Constraint noEdgesFromParameterTop(Node pStart, Point pStartPoint)
+	public static Constraint noEdgesFromParameterTop()
 	{
-		return ()->
+		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint)->
 		{
 			return !(pStart.getClass() == ImplicitParameterNode.class && 
 					IMPLICIT_PARAMETER_NODE_VIEWER.getTopRectangle(pStart).contains(pStartPoint));
@@ -58,10 +58,10 @@ public final class SequenceDiagramEdgeConstraints
 	 * For a return edge, the end node has to be the caller, and return
 	 * edges on self-calls are not allowed.
 	 */
-	public static Constraint returnEdge(Edge pEdge, Node pStart, Node pEnd, Diagram pDiagram)
+	public static Constraint returnEdge(Diagram pDiagram)
 	{
 		ControlFlow flow = new ControlFlow(pDiagram);
-		return ()->
+		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint)->
 		{
 			return !(pEdge.getClass() == ReturnEdge.class && 
 					(pStart.getClass() != CallNode.class ||
@@ -75,13 +75,13 @@ public final class SequenceDiagramEdgeConstraints
 	/*
 	 * Call edges that land on a parameter node must land on the lifeline part.
 	 */
-	public static Constraint callEdgeEnd(Edge pEdge, Node pEndNode, Point pEndPoint)
+	public static Constraint callEdgeEnd()
 	{
-		return ()->
+		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint)->
 		{
 			return !(pEdge.getClass() == CallEdge.class && 
-					 pEndNode.getClass() == ImplicitParameterNode.class &&
-							 IMPLICIT_PARAMETER_NODE_VIEWER.getTopRectangle(pEndNode).contains(pEndPoint));
+					 pEnd.getClass() == ImplicitParameterNode.class &&
+							 IMPLICIT_PARAMETER_NODE_VIEWER.getTopRectangle(pEnd).contains(pEndPoint));
 		};
 	}
 	
@@ -89,12 +89,12 @@ public final class SequenceDiagramEdgeConstraints
 	 * It's only legal to start an interaction on a parameter node if there are no existing activations
 	 * in the diagram.
 	 */
-	public static Constraint singleEntryPoint(Edge pEdge, Node pStartNode, Diagram pDiagram)
+	public static Constraint singleEntryPoint(Diagram pDiagram)
 	{
-		return ()->
+		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint)->
 		{
 			return !(pEdge.getClass() == CallEdge.class && 
-					pStartNode.getClass() == ImplicitParameterNode.class &&
+					pStart.getClass() == ImplicitParameterNode.class &&
 					new ControlFlow(pDiagram).hasEntryPoint());
 		};
 	}

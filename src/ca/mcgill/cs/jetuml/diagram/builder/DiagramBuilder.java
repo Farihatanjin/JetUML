@@ -52,6 +52,7 @@ import ca.mcgill.cs.jetuml.viewers.nodes.NodeViewerRegistry;
 import ca.mcgill.cs.jetuml.viewers.nodes.PackageNodeViewer;
 import ca.mcgill.cs.jetuml.views.DiagramViewer;
 
+
 /**
  * Wrapper around a Diagram that provides the logic for converting
  * requests to creates or remove nodes and edges, and convert these
@@ -68,6 +69,12 @@ public abstract class DiagramBuilder
 	protected final Diagram aDiagram;
 	private Dimension aCanvasDimension = new Dimension(DEFAULT_DIMENSION, DEFAULT_DIMENSION);
 	
+	//field to avoid object creation 
+	ConstraintSet constraints = new ConstraintSet(
+			EdgeConstraints.noteEdge(),
+			EdgeConstraints.noteNode());
+			
+			
 	/**
 	 * Creates a builder for pDiagram.
 	 * 
@@ -77,7 +84,7 @@ public abstract class DiagramBuilder
 	protected DiagramBuilder( Diagram pDiagram )
 	{
 		assert pDiagram != null;
-		aDiagram = pDiagram;
+		aDiagram = pDiagram;	
 	}
 	
 	/**
@@ -127,6 +134,7 @@ public abstract class DiagramBuilder
 		Optional<Node> startNode = viewer.findNode(aDiagram, pStart);
 		Optional<Node> endNode = viewer.findNode(aDiagram, pEnd);
 		
+		
 		if(startNode.isPresent() && startNode.get() instanceof NoteNode && pEdge instanceof NoteEdge)
 		{
 			return true; // Special case: we can always create a point node.
@@ -135,13 +143,12 @@ public abstract class DiagramBuilder
 		{
 			return false;
 		}
+	//problem: merge keeps populating constraints without clearing it 
 		
-		ConstraintSet constraints = new ConstraintSet(
-				EdgeConstraints.noteEdge(pEdge, startNode.get(), endNode.get()),
-				EdgeConstraints.noteNode(pEdge, startNode.get(), endNode.get())
-		);
-		constraints.merge(getAdditionalEdgeConstraints(pEdge, startNode.get(), endNode.get(), pStart, pEnd));
-		return constraints.satisfied();
+		
+		this.getAdditionalEdgeConstraints();
+		
+		return constraints.satisfied(pEdge, startNode.get(), endNode.get(), pStart, pEnd);
 	}
 	
 	/**
@@ -169,7 +176,7 @@ public abstract class DiagramBuilder
 	 * @return Additional, diagram type-specific constraints for adding edges.
 	 * @pre pEdge != null && pStart != null && pEnd != null && pStartPoint!= null && pEndPoint != null
 	 */
-	protected abstract ConstraintSet getAdditionalEdgeConstraints(Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint);
+	protected abstract void getAdditionalEdgeConstraints();
 	
 	/** 
 	 * The default behavior is to position the node so it entirely fits in the diagram, then 

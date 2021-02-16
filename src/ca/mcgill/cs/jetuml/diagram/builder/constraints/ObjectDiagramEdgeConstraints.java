@@ -27,6 +27,7 @@ import ca.mcgill.cs.jetuml.diagram.edges.ObjectCollaborationEdge;
 import ca.mcgill.cs.jetuml.diagram.edges.ObjectReferenceEdge;
 import ca.mcgill.cs.jetuml.diagram.nodes.FieldNode;
 import ca.mcgill.cs.jetuml.diagram.nodes.ObjectNode;
+import ca.mcgill.cs.jetuml.geom.Point;
 
 /**
  * Methods to create edge addition constraints that only apply to
@@ -39,9 +40,9 @@ public final class ObjectDiagramEdgeConstraints
 	/*
 	 * A collaboration edge can only be between two object nodes
 	 */
-	public static Constraint collaboration(Edge pEdge, Node pStart, Node pEnd)
+	public static Constraint collaboration()
 	{
-		return ()->
+		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint)->
 		{
 			return !(pEdge.getClass() == ObjectCollaborationEdge.class && 
 					(pStart.getClass() != ObjectNode.class || pEnd.getClass() != ObjectNode.class));
@@ -51,9 +52,9 @@ public final class ObjectDiagramEdgeConstraints
 	/*
 	 * A reference edge can only be between an object node and a field node.
 	 */
-	public static Constraint reference(Edge pEdge, Node pStart, Node pEnd)
+	public static Constraint reference()
 	{
-		return ()->
+		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint)->
 		{
 			return !(pEdge.getClass() == ObjectReferenceEdge.class &&
 					(pStart.getClass() != FieldNode.class || pEnd.getClass() != ObjectNode.class));

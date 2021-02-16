@@ -101,18 +101,23 @@ public class ClassDiagramBuilder extends DiagramBuilder
 	}
 	
 	@Override
-	protected ConstraintSet getAdditionalEdgeConstraints(Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint)
+	protected void getAdditionalEdgeConstraints()
 	{
-		return new ConstraintSet(
-				EdgeConstraints.maxEdges(pEdge, pStart, pEnd, aDiagram, 1),
-				ClassDiagramEdgeConstraints.noSelfGeneralization(pEdge, pStart, pEnd),
-				ClassDiagramEdgeConstraints.noSelfDependency(pEdge, pStart, pEnd),
-				ClassDiagramEdgeConstraints.noDirectCycles(DependencyEdge.class, pEdge, pStart, pEnd),
-				ClassDiagramEdgeConstraints.noDirectCycles(GeneralizationEdge.class, pEdge, pStart, pEnd),
-				ClassDiagramEdgeConstraints.noDirectCycles(AggregationEdge.class, pEdge, pStart, pEnd),
-				ClassDiagramEdgeConstraints.noDirectCycles(AssociationEdge.class, pEdge, pStart, pEnd),
-				ClassDiagramEdgeConstraints.noCombinedAssociationAggregation(pEdge, pStart, pEnd)
-		);
+		
+			constraints.add(
+					
+				EdgeConstraints.maxEdges(aDiagram, 1),
+				
+				ClassDiagramEdgeConstraints.noSelfGeneralization(),
+				ClassDiagramEdgeConstraints.noSelfDependency(),
+				ClassDiagramEdgeConstraints.noDirectCycles(DependencyEdge.class),
+				ClassDiagramEdgeConstraints.noDirectCycles(GeneralizationEdge.class),
+				ClassDiagramEdgeConstraints.noDirectCycles(AggregationEdge.class),
+				ClassDiagramEdgeConstraints.noDirectCycles(AssociationEdge.class),
+				ClassDiagramEdgeConstraints.noCombinedAssociationAggregation()
+				
+	);
+	
 	}
 	
 	private static boolean validChild(Node pPotentialChild)

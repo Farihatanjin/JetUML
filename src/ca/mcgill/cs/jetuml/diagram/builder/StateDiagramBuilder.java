@@ -48,12 +48,12 @@ public class StateDiagramBuilder extends DiagramBuilder
 	}
 	
 	@Override
-	protected ConstraintSet getAdditionalEdgeConstraints(Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint)
+	protected void getAdditionalEdgeConstraints()
 	{
-		return new ConstraintSet(
-			EdgeConstraints.maxEdges(pEdge, pStart, pEnd, aDiagram, 2),
-			StateDiagramEdgeConstraints.noEdgeFromFinalNode(pEdge, pStart),
-			StateDiagramEdgeConstraints.noEdgeToInitialNode(pEnd)
+		constraints.add(
+			EdgeConstraints.maxEdges(aDiagram, 2),
+			StateDiagramEdgeConstraints.noEdgeFromFinalNode(),
+			StateDiagramEdgeConstraints.noEdgeToInitialNode()
 		);
 	}
 }
