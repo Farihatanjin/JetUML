@@ -29,7 +29,6 @@ import org.junit.jupiter.api.Test;
 import ca.mcgill.cs.jetuml.JavaFXLoader;
 import ca.mcgill.cs.jetuml.diagram.nodes.ActorNode;
 import ca.mcgill.cs.jetuml.geom.Point;
-import ca.mcgill.cs.jetuml.testutils.GeometryUtils;
 
 public class TestActorNodeViewer
 {
@@ -70,7 +69,7 @@ public class TestActorNodeViewer
 	public void testGetBounds_LongName()
 	{
 		aNode.setName("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-		assertEquals(new Point(GeometryUtils.osDependent(-153,-166,-166),0), aViewer.getBounds(aNode).getOrigin());
+		assertEquals(new Point(0,0), aViewer.getBounds(aNode).getOrigin());
 		assertTrue(aViewer.getBounds(aNode).getWidth() > 48);
 		assertTrue(aViewer.getBounds(aNode).getHeight() > 64);
 	}
