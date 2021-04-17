@@ -21,6 +21,7 @@
 
 package ca.mcgill.cs.jetuml.diagram.builder.constraints;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -48,7 +49,6 @@ public class TestEdgeConstraints
 	private NoteEdge aNoteEdge;
 	private NoteNode aNote;
 	private Point aPoint;
-	
 	
 	@BeforeAll
 	public static void setupClass()
@@ -84,90 +84,107 @@ public class TestEdgeConstraints
 	public void testNoteEdgeNotNoteEdge()
 	{
 		createDiagram();
-		assertTrue(EdgeConstraints.noteEdge().satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram));
+		assertEquals("A note edge can only be added between:- Any node and a note node. - A note node and a point node.",(String)EdgeConstraints.noteEdge().satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)EdgeConstraints.noteEdge().satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testNoteEdgeNodeNotePoint()
 	{
 		createDiagram();
-		assertTrue(EdgeConstraints.noteEdge().satisfied(aNoteEdge, aNote, aPointNode, aPoint, aPoint, aDiagram));
+		assertEquals("A note edge can only be added between:- Any node and a note node. - A note node and a point node.",(String)EdgeConstraints.noteEdge().satisfied(aNoteEdge, aNote, aPointNode, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)EdgeConstraints.noteEdge().satisfied(aNoteEdge, aNote, aPointNode, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testNoteEdgeNodeNoteNotPoint()
 	{
 		createDiagram();
-		assertFalse(EdgeConstraints.noteEdge().satisfied(aNoteEdge, aNote, aNode1, aPoint, aPoint, aDiagram));
+		assertEquals("A note edge can only be added between:- Any node and a note node. - A note node and a point node.",(String)EdgeConstraints.noteEdge().satisfied(aNoteEdge, aNote, aNode1, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)EdgeConstraints.noteEdge().satisfied(aNoteEdge, aNote, aNode1, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testNoteEdgeNodeNoteNotePoint()
 	{
 		createDiagram();
-		assertFalse(EdgeConstraints.noteEdge().satisfied(aNoteEdge, aNode1, aPointNode, aPoint, aPoint, aDiagram));
+		assertEquals("A note edge can only be added between:- Any node and a note node. - A note node and a point node.",(String)EdgeConstraints.noteEdge().satisfied(aNoteEdge, aNode1, aPointNode, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)EdgeConstraints.noteEdge().satisfied(aNoteEdge, aNode1, aPointNode, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testNoteEdgeNodeAnyNode()
 	{
 		createDiagram();
-		assertTrue(EdgeConstraints.noteEdge().satisfied(aNoteEdge, aNode1, aNote, aPoint, aPoint, aDiagram));
+		assertEquals("A note edge can only be added between:- Any node and a note node. - A note node and a point node.",(String)EdgeConstraints.noteEdge().satisfied(aNoteEdge, aNode1, aNote, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)EdgeConstraints.noteEdge().satisfied(aNoteEdge, aNode1, aNote, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testNoteNodeAnyAny()
 	{
 		createDiagram();
-		assertTrue(EdgeConstraints.noteNode().satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram));
+		assertEquals("An edge can only be added to or from a note node if it is a note edge.",(String)EdgeConstraints.noteNode().satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)EdgeConstraints.noteNode().satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testNoteNodeNoteAny()
 	{
 		createDiagram();
-		assertFalse(EdgeConstraints.noteNode().satisfied(aEdge1, aNote, aNode2, aPoint, aPoint, aDiagram));
-		assertTrue(EdgeConstraints.noteNode().satisfied(aNoteEdge, aNote, aNode2, aPoint, aPoint, aDiagram));
+		assertEquals("An edge can only be added to or from a note node if it is a note edge.",(String)EdgeConstraints.noteNode().satisfied(aEdge1, aNote, aNode2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)EdgeConstraints.noteNode().satisfied(aEdge1, aNote, aNode2, aPoint, aPoint, aDiagram).values().toArray()[0]);
+		assertEquals("An edge can only be added to or from a note node if it is a note edge.",(String)EdgeConstraints.noteNode().satisfied(aNoteEdge, aNote, aNode2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)EdgeConstraints.noteNode().satisfied(aNoteEdge, aNote, aNode2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testNoteNodeAnyNote()
 	{
 		createDiagram();
-		assertFalse(EdgeConstraints.noteNode().satisfied(aEdge1, aNode1, aNote,  aPoint, aPoint, aDiagram));
-		assertTrue(EdgeConstraints.noteNode().satisfied(aNoteEdge, aNode1, aNote, aPoint, aPoint, aDiagram));
+		assertEquals("An edge can only be added to or from a note node if it is a note edge.",(String)EdgeConstraints.noteNode().satisfied(aEdge1, aNode1, aNote,  aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)EdgeConstraints.noteNode().satisfied(aEdge1, aNode1, aNote,  aPoint, aPoint, aDiagram).values().toArray()[0]);
+		assertEquals("An edge can only be added to or from a note node if it is a note edge.",(String)EdgeConstraints.noteNode().satisfied(aNoteEdge, aNode1, aNote, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)EdgeConstraints.noteNode().satisfied(aNoteEdge, aNode1, aNote, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testNoteNodeNoteNote()
 	{
 		createDiagram();
-		assertFalse(EdgeConstraints.noteNode().satisfied(aEdge1, aNote, aNote, aPoint, aPoint, aDiagram));
-		assertTrue(EdgeConstraints.noteNode().satisfied(aNoteEdge, aNote, aNote, aPoint, aPoint, aDiagram));
+		assertEquals("An edge can only be added to or from a note node if it is a note edge.",(String)EdgeConstraints.noteNode().satisfied(aEdge1, aNote, aNote, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)EdgeConstraints.noteNode().satisfied(aEdge1, aNote, aNote, aPoint, aPoint, aDiagram).values().toArray()[0]);
+		assertEquals("An edge can only be added to or from a note node if it is a note edge.",(String)EdgeConstraints.noteNode().satisfied(aNoteEdge, aNote, aNote, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)EdgeConstraints.noteNode().satisfied(aNoteEdge, aNote, aNote, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test 
 	public void testMaxEdgesOne()
 	{
 		createDiagram();
-		assertTrue(EdgeConstraints.maxEdges(1).satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram));
+		assertEquals("Only pNumber of edges of the same type are allowed in one direction between two nodes.",EdgeConstraints.maxEdges(1).satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)EdgeConstraints.maxEdges(1).satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 		aEdge1.connect(aNode1, aNode2, aDiagram);
 		aDiagram.addEdge(aEdge1);
-		assertFalse(EdgeConstraints.maxEdges(1).satisfied(new DependencyEdge(), aNode1, aNode2, aPoint, aPoint, aDiagram));
+		assertEquals("Only pNumber of edges of the same type are allowed in one direction between two nodes.",(String)EdgeConstraints.maxEdges(1).satisfied(new DependencyEdge(), aNode1, aNode2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)EdgeConstraints.maxEdges(1).satisfied(new DependencyEdge(), aNode1, aNode2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test 
 	public void testMaxEdgesTwo()
 	{
 		createDiagram();
-		assertTrue(EdgeConstraints.maxEdges(2).satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram));
+		assertEquals("Only pNumber of edges of the same type are allowed in one direction between two nodes.",EdgeConstraints.maxEdges(1).satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)EdgeConstraints.maxEdges(2).satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 		aEdge1.connect(aNode1, aNode2, aDiagram);
 		aDiagram.addEdge(aEdge1);
-		assertTrue(EdgeConstraints.maxEdges(2).satisfied(new DependencyEdge(), aNode1, aNode2, aPoint, aPoint, aDiagram));
+		assertEquals("Only pNumber of edges of the same type are allowed in one direction between two nodes.",EdgeConstraints.maxEdges(1).satisfied(new DependencyEdge(), aNode1, aNode2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)EdgeConstraints.maxEdges(2).satisfied(new DependencyEdge(), aNode1, aNode2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 		DependencyEdge edge = aEdge1;
 		edge.connect(aNode1, aNode2, aDiagram);
 		aDiagram.addEdge(edge);
-		assertFalse(EdgeConstraints.maxEdges(2).satisfied(new DependencyEdge(), aNode1, aNode2, aPoint, aPoint, aDiagram));
+		assertEquals("Only pNumber of edges of the same type are allowed in one direction between two nodes.",EdgeConstraints.maxEdges(1).satisfied(new DependencyEdge(), aNode1, aNode2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)EdgeConstraints.maxEdges(2).satisfied(new DependencyEdge(), aNode1, aNode2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test 
@@ -177,7 +194,8 @@ public class TestEdgeConstraints
 		aEdge1.connect(aNode1, aNode2, aDiagram);
 		aDiagram.addEdge(aEdge1);
 		ClassNode node3 = new ClassNode();
-		assertTrue(EdgeConstraints.maxEdges(1).satisfied(new DependencyEdge(), aNode1, node3, aPoint, aPoint, aDiagram));
+		assertEquals("Only pNumber of edges of the same type are allowed in one direction between two nodes.",EdgeConstraints.maxEdges(1).satisfied(new DependencyEdge(), aNode1, node3, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)EdgeConstraints.maxEdges(1).satisfied(new DependencyEdge(), aNode1, node3, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test 
@@ -187,7 +205,8 @@ public class TestEdgeConstraints
 		aEdge1.connect(aNode1, aNode2, aDiagram);
 		aDiagram.addEdge(aEdge1);
 		ClassNode node3 = new ClassNode();
-		assertTrue(EdgeConstraints.maxEdges(1).satisfied(aEdge1, node3, aNode2, aPoint, aPoint, aDiagram));
+		assertEquals("Only pNumber of edges of the same type are allowed in one direction between two nodes.",EdgeConstraints.maxEdges(1).satisfied(aEdge1, node3, aNode2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)EdgeConstraints.maxEdges(1).satisfied(aEdge1, node3, aNode2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test 
@@ -197,7 +216,8 @@ public class TestEdgeConstraints
 		aEdge1.connect(aNode1, aNode2, aDiagram);
 		aDiagram.addEdge(aEdge1);
 		ClassNode node3 = new ClassNode();
-		assertTrue(EdgeConstraints.maxEdges(1).satisfied(aEdge1, node3, new ClassNode(), aPoint, aPoint, aDiagram));
+		assertEquals("Only pNumber of edges of the same type are allowed in one direction between two nodes.",EdgeConstraints.maxEdges(1).satisfied(aEdge1, node3, new ClassNode(), aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)EdgeConstraints.maxEdges(1).satisfied(aEdge1, node3, new ClassNode(), aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test 
@@ -206,20 +226,23 @@ public class TestEdgeConstraints
 		createDiagram();
 		aEdge1.connect(aNode1, aNode2, aDiagram);
 		aDiagram.addEdge(aEdge1);
-		assertTrue(EdgeConstraints.maxEdges(1).satisfied(new NoteEdge(), aNode1, aNode2, aPoint, aPoint, aDiagram ));
+		assertEquals("Only pNumber of edges of the same type are allowed in one direction between two nodes.",EdgeConstraints.maxEdges(1).satisfied(new NoteEdge(), aNode1, aNode2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)EdgeConstraints.maxEdges(1).satisfied(new NoteEdge(), aNode1, aNode2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testNodeSelfEdgeTrue()
 	{
 		createDiagram();
-		assertTrue(EdgeConstraints.noSelfEdge().satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram));
+		assertEquals("Self-edges are not allowed.",(String)EdgeConstraints.noSelfEdge().satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)EdgeConstraints.noSelfEdge().satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testNodeSelfEdgeFalse()
 	{
 		createDiagram();
-		assertFalse(EdgeConstraints.noSelfEdge().satisfied(aEdge1, aNode1, aNode1, aPoint, aPoint, aDiagram));
+		assertEquals("Self-edges are not allowed.",(String)EdgeConstraints.noSelfEdge().satisfied(aEdge1, aNode1, aNode1, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)EdgeConstraints.noSelfEdge().satisfied(aEdge1, aNode1, aNode1, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 }

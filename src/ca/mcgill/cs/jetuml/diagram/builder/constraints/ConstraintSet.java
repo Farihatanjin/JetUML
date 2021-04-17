@@ -21,15 +21,17 @@
 
 package ca.mcgill.cs.jetuml.diagram.builder.constraints;
 
+
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-
 import ca.mcgill.cs.jetuml.annotations.Immutable;
 import ca.mcgill.cs.jetuml.diagram.Diagram;
 import ca.mcgill.cs.jetuml.diagram.Edge;
 import ca.mcgill.cs.jetuml.diagram.Node;
 import ca.mcgill.cs.jetuml.geom.Point;
+
 
 /**
  * Represents a set of constraints.
@@ -39,6 +41,10 @@ public class ConstraintSet
 {
 	private final Set<Constraint> aConstraints = new HashSet<>();
 	
+
+	String failedConstraintError;
+
+
 	/**
 	 * Initializes a ConstraintSet with all the constraints in 
 	 * pConstraints.
@@ -48,9 +54,13 @@ public class ConstraintSet
 	 */
 	public ConstraintSet( Constraint... pConstraints )
 	{
+	
 		assert pConstraints != null;
 		aConstraints.addAll(Arrays.asList(pConstraints));
 	}
+	
+
+
 		
 	/**
 	 * Returns True if and only if all the constraints in the set are satisfied.
@@ -63,15 +73,31 @@ public class ConstraintSet
 	 * @param pDiagram The diagram in which the edge is to be added.
 	 * @return True if and only if all the constraints in the set are satisfied.
 	 */
-	public boolean satisfied(Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram)
+	public HashMap<String,Boolean> satisfied(Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram)
 	{
+		HashMap<String,Boolean> outputHashmap = new HashMap<String,Boolean>();
 		for( Constraint constraint : aConstraints )
 		{
-			if( !constraint.satisfied(pEdge, pStart, pEnd, pStartPoint, pEndPoint, pDiagram))
-			{
-				return false;
+
+			for (Boolean satisfied: constraint.satisfied(pEdge, pStart, pEnd, pStartPoint, pEndPoint, pDiagram).values()){
+				
+				if(!satisfied) {
+					return constraint.satisfied(pEdge, pStart, pEnd, pStartPoint, pEndPoint, pDiagram);
+				}
+				
 			}
+		
 		}
-		return true;
+		
+		outputHashmap.put(null,true);
+		return outputHashmap;
 	}
+	
+	/**
+	 * @return the failed constraint error message
+	 */
+	public String getFailedConstraint() {
+		return failedConstraintError;
+	}
+
 }

@@ -21,6 +21,7 @@
 
 package ca.mcgill.cs.jetuml.diagram.builder.constraints;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -77,56 +78,64 @@ public class TestObjectDiagramEdgeConstraints
 	public void testCollaborationNotCollaborationEdge()
 	{
 		createDiagram();
-		assertTrue(ObjectDiagramEdgeConstraints.collaboration().satisfied(aReference1, aObject1, aObject2, aPoint, aPoint, aDiagram));
+		assertEquals("A collaboration edge can only be between two object nodes.",(String)ObjectDiagramEdgeConstraints.collaboration().satisfied(aReference1, aObject1, aObject2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)ObjectDiagramEdgeConstraints.collaboration().satisfied(aReference1, aObject1, aObject2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testCollaborationCollaborationNotCorrectStartNode()
 	{
 		createDiagram();
-		assertFalse(ObjectDiagramEdgeConstraints.collaboration().satisfied(aCollaboration1, aField1, aObject2, aPoint, aPoint, aDiagram));
+		assertEquals("A collaboration edge can only be between two object nodes.",(String)ObjectDiagramEdgeConstraints.collaboration().satisfied(aCollaboration1, aField1, aObject2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)ObjectDiagramEdgeConstraints.collaboration().satisfied(aCollaboration1, aField1, aObject2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testCollaborationCollaborationNotCorrectEndNode()
 	{
 		createDiagram();
-		assertFalse(ObjectDiagramEdgeConstraints.collaboration().satisfied(aCollaboration1, aObject2, aField1, aPoint, aPoint, aDiagram));
+		assertEquals("A collaboration edge can only be between two object nodes.",(String)ObjectDiagramEdgeConstraints.collaboration().satisfied(aCollaboration1, aObject2, aField1, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)ObjectDiagramEdgeConstraints.collaboration().satisfied(aCollaboration1, aObject2, aField1, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testCollaborationCollaborationCorrect()
 	{
 		createDiagram();
-		assertTrue(ObjectDiagramEdgeConstraints.collaboration().satisfied(aCollaboration1, aObject2, aObject2, aPoint, aPoint, aDiagram));
+		assertEquals("A collaboration edge can only be between two object nodes.",(String)ObjectDiagramEdgeConstraints.collaboration().satisfied(aCollaboration1, aObject2, aObject2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)ObjectDiagramEdgeConstraints.collaboration().satisfied(aCollaboration1, aObject2, aObject2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testReferenceNotReference()
 	{
 		createDiagram();
-		assertTrue(ObjectDiagramEdgeConstraints.reference().satisfied(aCollaboration1, aField1, aObject2, aPoint, aPoint, aDiagram));
+		assertEquals("A reference edge can only be between an object node and a field node.",(String) (ObjectDiagramEdgeConstraints.reference().satisfied(aCollaboration1, aField1, aObject2, aPoint, aPoint, aDiagram).keySet().toArray()[0]));
+		assertTrue((boolean)ObjectDiagramEdgeConstraints.reference().satisfied(aCollaboration1, aField1, aObject2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testReferenceReferenceNotCorrectStart()
 	{
 		createDiagram();
-		assertFalse(ObjectDiagramEdgeConstraints.reference().satisfied(aReference1, aObject1, aObject2, aPoint, aPoint, aDiagram));
+		assertEquals("A reference edge can only be between an object node and a field node.",(String) (ObjectDiagramEdgeConstraints.reference().satisfied(aReference1, aObject1, aObject2, aPoint, aPoint, aDiagram).keySet().toArray()[0]));
+		assertFalse((boolean)ObjectDiagramEdgeConstraints.reference().satisfied(aReference1, aObject1, aObject2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testReferenceReferenceNotCorrectEnd()
 	{
 		createDiagram();
-		assertFalse(ObjectDiagramEdgeConstraints.reference().satisfied(aReference1, aField1, aField1, aPoint, aPoint, aDiagram));
+		assertEquals("A reference edge can only be between an object node and a field node.",(String) (ObjectDiagramEdgeConstraints.reference().satisfied(aReference1, aField1, aField1, aPoint, aPoint, aDiagram).keySet().toArray()[0]));
+		assertFalse((boolean)ObjectDiagramEdgeConstraints.reference().satisfied(aReference1, aField1, aField1, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 
 	@Test
 	public void testReferenceReferenceCorrect()
 	{
 		createDiagram();
-		assertTrue(ObjectDiagramEdgeConstraints.reference().satisfied(aReference1, aField1, aObject2, aPoint, aPoint, aDiagram));
+		assertEquals("A reference edge can only be between an object node and a field node.",(String) (ObjectDiagramEdgeConstraints.reference().satisfied(aReference1, aField1, aObject2, aPoint, aPoint, aDiagram).keySet().toArray()[0]));
+		assertTrue((boolean)ObjectDiagramEdgeConstraints.reference().satisfied(aReference1, aField1, aObject2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 
 

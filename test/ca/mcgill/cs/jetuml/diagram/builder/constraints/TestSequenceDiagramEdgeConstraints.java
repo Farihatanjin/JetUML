@@ -21,6 +21,7 @@
 
 package ca.mcgill.cs.jetuml.diagram.builder.constraints;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -82,49 +83,56 @@ public class TestSequenceDiagramEdgeConstraints
 	public void testNoEdgeFromParameterTopNotParameterNode()
 	{
 		createDiagram();
-		assertTrue(SequenceDiagramEdgeConstraints.noEdgesFromParameterTop().satisfied(aCallEdge, aCallNode1, aCallNode1, aPoint, aPoint, aDiagram));
+		assertEquals("No edge is allowed to start in a parameter node.",(String)SequenceDiagramEdgeConstraints.noEdgesFromParameterTop().satisfied(aCallEdge, aCallNode1, aCallNode1, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)SequenceDiagramEdgeConstraints.noEdgesFromParameterTop().satisfied(aCallEdge, aCallNode1, aCallNode1, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testNoEdgeFromParameterTopParameterFalse()
 	{
 		createDiagram();
-		assertFalse(SequenceDiagramEdgeConstraints.noEdgesFromParameterTop().satisfied(aCallEdge, aParameter1, aParameter1,new Point(5,5),aPoint, aDiagram));
+		assertEquals("No edge is allowed to start in a parameter node.",(String)SequenceDiagramEdgeConstraints.noEdgesFromParameterTop().satisfied(aCallEdge, aParameter1, aParameter1,new Point(5,5),aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)SequenceDiagramEdgeConstraints.noEdgesFromParameterTop().satisfied(aCallEdge, aParameter1, aParameter1,new Point(5,5),aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testNoEdgeFromParameterTopParameterTrue()
 	{
 		createDiagram();
-		assertTrue(SequenceDiagramEdgeConstraints.noEdgesFromParameterTop().satisfied(aCallEdge, aParameter1, aParameter1, new Point(40,65), aPoint, aDiagram));
+		assertEquals("No edge is allowed to start in a parameter node.",(String)SequenceDiagramEdgeConstraints.noEdgesFromParameterTop().satisfied(aCallEdge, aParameter1, aParameter1, new Point(40,65), aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)SequenceDiagramEdgeConstraints.noEdgesFromParameterTop().satisfied(aCallEdge, aParameter1, aParameter1, new Point(40,65), aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testreturnEdgeNotReturnEdge()
 	{
 		createDiagram();
-		assertTrue(SequenceDiagramEdgeConstraints.returnEdge().satisfied(aCallEdge, aCallNode1, aCallNode2, aPoint, aPoint, aDiagram));
+		assertEquals("For a return edge, the end node has to be the caller, and return edges on self-calls are not allowed.",(String)SequenceDiagramEdgeConstraints.returnEdge().satisfied(aCallEdge, aCallNode1, aCallNode2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)SequenceDiagramEdgeConstraints.returnEdge().satisfied(aCallEdge, aCallNode1, aCallNode2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testreturnEdgeIncompatibleStart()
 	{
 		createDiagram();
-		assertFalse(SequenceDiagramEdgeConstraints.returnEdge().satisfied(aReturnEdge, aParameter1, aCallNode2, aPoint, aPoint, aDiagram));
+		assertEquals("For a return edge, the end node has to be the caller, and return edges on self-calls are not allowed.",(String)SequenceDiagramEdgeConstraints.returnEdge().satisfied(aReturnEdge, aParameter1, aCallNode2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)SequenceDiagramEdgeConstraints.returnEdge().satisfied(aReturnEdge, aParameter1, aCallNode2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testreturnEdgeIncompatibleEnd()
 	{
 		createDiagram();
-		assertFalse(SequenceDiagramEdgeConstraints.returnEdge().satisfied(aReturnEdge, aCallNode1, aParameter2, aPoint, aPoint, aDiagram));
+		assertEquals("For a return edge, the end node has to be the caller, and return edges on self-calls are not allowed.",(String)SequenceDiagramEdgeConstraints.returnEdge().satisfied(aReturnEdge, aCallNode1, aParameter2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)SequenceDiagramEdgeConstraints.returnEdge().satisfied(aReturnEdge, aCallNode1, aParameter2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testreturnEdgeEndNoCaller()
 	{
 		createDiagram();
-		assertFalse(SequenceDiagramEdgeConstraints.returnEdge().satisfied(aReturnEdge, aCallNode1, aCallNode2, aPoint, aPoint, aDiagram));
+		assertEquals("For a return edge, the end node has to be the caller, and return edges on self-calls are not allowed.",(String)SequenceDiagramEdgeConstraints.returnEdge().satisfied(aReturnEdge, aCallNode1, aCallNode2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)SequenceDiagramEdgeConstraints.returnEdge().satisfied(aReturnEdge, aCallNode1, aCallNode2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
@@ -133,7 +141,8 @@ public class TestSequenceDiagramEdgeConstraints
 		createDiagram();
 		aCallEdge.connect(aCallNode1, aCallNode2, aDiagram);
 		aDiagram.addEdge(aCallEdge);
-		assertFalse(SequenceDiagramEdgeConstraints.returnEdge().satisfied(aReturnEdge, aCallNode2, aCallNode3, aPoint, aPoint, aDiagram));
+		assertEquals("For a return edge, the end node has to be the caller, and return edges on self-calls are not allowed.",(String)SequenceDiagramEdgeConstraints.returnEdge().satisfied(aReturnEdge, aCallNode2, aCallNode3, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)SequenceDiagramEdgeConstraints.returnEdge().satisfied(aReturnEdge, aCallNode2, aCallNode3, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
@@ -142,7 +151,8 @@ public class TestSequenceDiagramEdgeConstraints
 		createDiagram();
 		aCallEdge.connect(aCallNode1, aCallNode3, aDiagram);
 		aDiagram.addEdge(aCallEdge);
-		assertFalse(SequenceDiagramEdgeConstraints.returnEdge().satisfied(aReturnEdge, aCallNode3, aCallNode1, aPoint, aPoint, aDiagram));
+		assertEquals("For a return edge, the end node has to be the caller, and return edges on self-calls are not allowed.",(String)SequenceDiagramEdgeConstraints.returnEdge().satisfied(aReturnEdge, aCallNode3, aCallNode1, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)SequenceDiagramEdgeConstraints.returnEdge().satisfied(aReturnEdge, aCallNode3, aCallNode1, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
@@ -151,62 +161,71 @@ public class TestSequenceDiagramEdgeConstraints
 		createDiagram();
 		aCallEdge.connect(aCallNode1, aCallNode2, aDiagram);
 		aDiagram.addEdge(aCallEdge);
-		assertTrue(SequenceDiagramEdgeConstraints.returnEdge().satisfied(aReturnEdge, aCallNode2, aCallNode1, aPoint, aPoint, aDiagram));
+		assertEquals("For a return edge, the end node has to be the caller, and return edges on self-calls are not allowed.",(String)SequenceDiagramEdgeConstraints.returnEdge().satisfied(aReturnEdge, aCallNode2, aCallNode1, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)SequenceDiagramEdgeConstraints.returnEdge().satisfied(aReturnEdge, aCallNode2, aCallNode1, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}	
 	
 	@Test
 	public void testCallEdgeEndNotCallEdge()
 	{
 		createDiagram();
-		assertTrue(SequenceDiagramEdgeConstraints.callEdgeEnd().satisfied(aReturnEdge, aCallNode2, aCallNode1, aPoint, new Point(10,10), aDiagram));
+		assertEquals("Call edges that land on a parameter node must land on the life line part, except if it is allowed to create a constructor.",(String)SequenceDiagramEdgeConstraints.callEdgeEnd().satisfied(aReturnEdge, aCallNode2, aCallNode1, aPoint, new Point(10,10), aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)SequenceDiagramEdgeConstraints.callEdgeEnd().satisfied(aReturnEdge, aCallNode2, aCallNode1, aPoint, new Point(10,10), aDiagram).values().toArray()[0]);
 	}	
 	
 	@Test
 	public void testCallEdgeEndEndNotParameter()
 	{
 		createDiagram();
-		assertTrue(SequenceDiagramEdgeConstraints.callEdgeEnd().satisfied(aCallEdge, aCallNode2, aCallNode1, aPoint, new Point(10,10), aDiagram));
+		assertEquals("Call edges that land on a parameter node must land on the life line part, except if it is allowed to create a constructor.",(String)SequenceDiagramEdgeConstraints.callEdgeEnd().satisfied(aCallEdge, aCallNode2, aCallNode1, aPoint, new Point(10,10), aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)SequenceDiagramEdgeConstraints.callEdgeEnd().satisfied(aCallEdge, aCallNode2, aCallNode1, aPoint, new Point(10,10), aDiagram).values().toArray()[0]);
 	}	
 	
 	@Test
 	public void testCallEdgeEndEndOnLifeLine()
 	{
 		createDiagram();
-		assertTrue(SequenceDiagramEdgeConstraints.callEdgeEnd().satisfied(aCallEdge, aParameter2, aCallNode1, aPoint, new Point(0,85), aDiagram));
+		assertEquals("Call edges that land on a parameter node must land on the life line part, except if it is allowed to create a constructor.",(String)SequenceDiagramEdgeConstraints.callEdgeEnd().satisfied(aCallEdge, aParameter2, aCallNode1, aPoint, new Point(0,85), aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)SequenceDiagramEdgeConstraints.callEdgeEnd().satisfied(aCallEdge, aParameter2, aCallNode1, aPoint, new Point(0,85), aDiagram).values().toArray()[0]);
 	}	
 	
 	@Test
 	public void testCallEdgeEndEndOnTopRectangle()
 	{
 		createDiagram();
-		assertTrue(SequenceDiagramEdgeConstraints.callEdgeEnd().satisfied(aCallEdge, aParameter2, aCallNode1, aPoint, new Point(0,5), aDiagram));
+		assertEquals("Call edges that land on a parameter node must land on the life line part, except if it is allowed to create a constructor.",(String)SequenceDiagramEdgeConstraints.callEdgeEnd().satisfied(aCallEdge, aParameter2, aCallNode1, aPoint, new Point(0,5), aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)SequenceDiagramEdgeConstraints.callEdgeEnd().satisfied(aCallEdge, aParameter2, aCallNode1, aPoint, new Point(0,5), aDiagram).values().toArray()[0]);
 	}	
 	
 	@Test
 	public void testSingleEntryPointNotACallEdge()
 	{
 		createDiagram();
-		assertTrue(SequenceDiagramEdgeConstraints.singleEntryPoint().satisfied(aReturnEdge, aParameter1, aParameter1, aPoint, aPoint, aDiagram));
+		assertEquals("It's only legal to start an interaction on a parameter node if there are no existing activations in the diagram.",(String)SequenceDiagramEdgeConstraints.singleEntryPoint().satisfied(aReturnEdge, aParameter1, aParameter1, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)SequenceDiagramEdgeConstraints.singleEntryPoint().satisfied(aReturnEdge, aParameter1, aParameter1, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}	
 	
 	@Test
 	public void testSingleEntryPointNotStartingOnAParameterNode()
 	{
 		createDiagram();
-		assertTrue(SequenceDiagramEdgeConstraints.singleEntryPoint().satisfied(aCallEdge, aCallNode1, aCallNode1, aPoint, aPoint, aDiagram));
+		assertEquals("It's only legal to start an interaction on a parameter node if there are no existing activations in the diagram.",(String)SequenceDiagramEdgeConstraints.singleEntryPoint().satisfied(aCallEdge, aCallNode1, aCallNode1, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)SequenceDiagramEdgeConstraints.singleEntryPoint().satisfied(aCallEdge, aCallNode1, aCallNode1, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}	
 	
 	@Test
 	public void testSingleEntryPointStartingOnParameterNodeNotSatisfied()
 	{
 		createDiagram();
-		assertFalse(SequenceDiagramEdgeConstraints.singleEntryPoint().satisfied(aCallEdge, aParameter1, aParameter1, aPoint, aPoint, aDiagram));
+		assertEquals("It's only legal to start an interaction on a parameter node if there are no existing activations in the diagram.",(String)SequenceDiagramEdgeConstraints.singleEntryPoint().satisfied(aCallEdge, aParameter1, aParameter1, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)SequenceDiagramEdgeConstraints.singleEntryPoint().satisfied(aCallEdge, aParameter1, aParameter1, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}	
 	
 	@Test
 	public void testSingleEntryPointStartingOnParameterNodeSatisfied()
 	{
 		aDiagram.addRootNode(aParameter1);
-		assertTrue(SequenceDiagramEdgeConstraints.singleEntryPoint().satisfied(aCallEdge, aParameter1, aParameter1, aPoint, aPoint, aDiagram));
+		assertEquals("It's only legal to start an interaction on a parameter node if there are no existing activations in the diagram.",(String)SequenceDiagramEdgeConstraints.singleEntryPoint().satisfied(aCallEdge, aParameter1, aParameter1, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)SequenceDiagramEdgeConstraints.singleEntryPoint().satisfied(aCallEdge, aParameter1, aParameter1, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}	
 }

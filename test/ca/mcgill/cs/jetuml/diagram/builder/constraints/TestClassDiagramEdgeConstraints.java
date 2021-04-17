@@ -21,6 +21,7 @@
 
 package ca.mcgill.cs.jetuml.diagram.builder.constraints;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -44,6 +45,7 @@ public class TestClassDiagramEdgeConstraints
 	private DependencyEdge aEdge1;
 	private GeneralizationEdge aGen1;
 	private Point aPoint;
+	
 	
 	@BeforeAll
 	public static void setupClass()
@@ -73,30 +75,41 @@ public class TestClassDiagramEdgeConstraints
 	public void testNoSelfGeneralizationNotAGeneralizationEdge()
 	{
 		createDiagram();
-		assertTrue(ClassDiagramEdgeConstraints.noSelfGeneralization().satisfied(aEdge1, aNode1, new ClassNode(), aPoint, aPoint, aDiagram));
-		assertTrue(ClassDiagramEdgeConstraints.noSelfGeneralization().satisfied(aEdge1, aNode1, aNode1, aPoint, aPoint, aDiagram));
+		assertEquals("Self edges are not allowed for Generalization edges.",(String) ClassDiagramEdgeConstraints.noSelfGeneralization().satisfied(aEdge1, aNode1, new ClassNode(), aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)ClassDiagramEdgeConstraints.noSelfGeneralization().satisfied(aEdge1, aNode1, new ClassNode(), aPoint, aPoint, aDiagram).values().toArray()[0]);
+		
+		assertEquals("Self edges are not allowed for Generalization edges.",(String) ClassDiagramEdgeConstraints.noSelfGeneralization().satisfied(aEdge1, aNode1, aNode1, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)ClassDiagramEdgeConstraints.noSelfGeneralization().satisfied(aEdge1, aNode1, aNode1, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testNoSelfGeneralizationGeneralizationEdge()
 	{
 		createDiagram();
-		assertTrue(ClassDiagramEdgeConstraints.noSelfGeneralization().satisfied(aGen1, aNode1, aNode2,aPoint, aPoint, aDiagram));
-		assertFalse(ClassDiagramEdgeConstraints.noSelfGeneralization().satisfied(aGen1, aNode1, aNode1,aPoint, aPoint, aDiagram));
+		assertEquals("Self edges are not allowed for Generalization edges.",(String) ClassDiagramEdgeConstraints.noSelfGeneralization().satisfied(aGen1, aNode1, aNode2,aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)ClassDiagramEdgeConstraints.noSelfGeneralization().satisfied(aGen1, aNode1, aNode2,aPoint, aPoint, aDiagram).values().toArray()[0]);
+		
+		assertEquals("Self edges are not allowed for Generalization edges.",(String) ClassDiagramEdgeConstraints.noSelfGeneralization().satisfied(aGen1, aNode1, aNode1,aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)ClassDiagramEdgeConstraints.noSelfGeneralization().satisfied(aGen1, aNode1, aNode1,aPoint, aPoint, aDiagram).values().toArray()[0]);
+		
 	}
 	
 	@Test
 	public void testNoDirectCycles_NotADependency()
 	{
 		createDiagram();
-		assertTrue(ClassDiagramEdgeConstraints.noDirectCycles(DependencyEdge.class).satisfied(new GeneralizationEdge(), aNode1, aNode2, aPoint, aPoint, aDiagram));
+		assertEquals("There can't be two edges of a given type, one in each direction, between two nodes.",(String) ClassDiagramEdgeConstraints.noDirectCycles(DependencyEdge.class).satisfied(new GeneralizationEdge(), aNode1, aNode2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);	
+		assertTrue((boolean)ClassDiagramEdgeConstraints.noDirectCycles(DependencyEdge.class).satisfied(new GeneralizationEdge(), aNode1, aNode2, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testNoDirectCycles_NoExistingEdge()
 	{
 		createDiagram();
-		assertTrue(ClassDiagramEdgeConstraints.noDirectCycles(DependencyEdge.class).satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram));
+		
+		assertEquals("There can't be two edges of a given type, one in each direction, between two nodes.",(String) ClassDiagramEdgeConstraints.noDirectCycles(DependencyEdge.class).satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)ClassDiagramEdgeConstraints.noDirectCycles(DependencyEdge.class).satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram).values().toArray()[0]);
+		
 	}
 	
 	@Test
@@ -106,7 +119,11 @@ public class TestClassDiagramEdgeConstraints
 		GeneralizationEdge edge = new GeneralizationEdge();
 		edge.connect(aNode1, aNode2, aDiagram);
 		aDiagram.addEdge(edge);
-		assertTrue(ClassDiagramEdgeConstraints.noDirectCycles(DependencyEdge.class).satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram));
+		
+
+		assertEquals("There can't be two edges of a given type, one in each direction, between two nodes.",(String) ClassDiagramEdgeConstraints.noDirectCycles(DependencyEdge.class).satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)ClassDiagramEdgeConstraints.noDirectCycles(DependencyEdge.class).satisfied(aEdge1, aNode1, aNode2, aPoint, aPoint, aDiagram).values().toArray()[0]);
+		
 	}
 	
 	@Test
@@ -116,6 +133,9 @@ public class TestClassDiagramEdgeConstraints
 		DependencyEdge edge = new DependencyEdge();
 		edge.connect(aNode1, aNode2, aDiagram);
 		aDiagram.addEdge(edge);
-		assertFalse(ClassDiagramEdgeConstraints.noDirectCycles(DependencyEdge.class).satisfied(aEdge1, aNode2, aNode1, aPoint, aPoint, aDiagram));
+		
+		assertEquals("There can't be two edges of a given type, one in each direction, between two nodes.",(String) ClassDiagramEdgeConstraints.noDirectCycles(DependencyEdge.class).satisfied(aEdge1, aNode2, aNode1, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)ClassDiagramEdgeConstraints.noDirectCycles(DependencyEdge.class).satisfied(aEdge1, aNode2, aNode1, aPoint, aPoint, aDiagram).values().toArray()[0]);
+		
 	}
 }

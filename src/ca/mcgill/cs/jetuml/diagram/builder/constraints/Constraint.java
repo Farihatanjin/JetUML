@@ -21,6 +21,10 @@
 
 package ca.mcgill.cs.jetuml.diagram.builder.constraints;
 
+
+
+import java.util.HashMap;
+
 import ca.mcgill.cs.jetuml.diagram.Diagram;
 import ca.mcgill.cs.jetuml.diagram.Edge;
 import ca.mcgill.cs.jetuml.diagram.Node;
@@ -40,5 +44,5 @@ public interface Constraint
 	 * @param pDiagram The diagram in which the edge is to be added.
 	 * @return True if this constraint is satisfied.
 	 */
-	boolean satisfied(Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram);
+	HashMap<String,Boolean> satisfied(Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram);
 }

@@ -21,6 +21,9 @@
 
 package ca.mcgill.cs.jetuml.diagram.builder.constraints;
 
+import java.util.HashMap;
+
+
 import ca.mcgill.cs.jetuml.diagram.Diagram;
 import ca.mcgill.cs.jetuml.diagram.Edge;
 import ca.mcgill.cs.jetuml.diagram.Node;
@@ -28,7 +31,7 @@ import ca.mcgill.cs.jetuml.diagram.edges.NoteEdge;
 import ca.mcgill.cs.jetuml.diagram.nodes.NoteNode;
 import ca.mcgill.cs.jetuml.diagram.nodes.PointNode;
 import ca.mcgill.cs.jetuml.geom.Point;
-
+import static ca.mcgill.cs.jetuml.application.ApplicationResources.RESOURCES;
 /**
  * Methods to create edge addition constraints that apply to
  * all diagrams. CSOFF:
@@ -36,7 +39,7 @@ import ca.mcgill.cs.jetuml.geom.Point;
 public final class EdgeConstraints
 {
 	private EdgeConstraints() {}
-	
+
 	/* 
 	 * A note edge can only be added between:
 	 * - Any node and a note node.
@@ -45,9 +48,14 @@ public final class EdgeConstraints
 	public static Constraint noteEdge()
 	{
 		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram)->
-				!( pEdge.getClass() == NoteEdge.class && 
+		
+		{
+			HashMap<String, Boolean> outputHashmap  = new HashMap<String,Boolean>();
+			outputHashmap.put(RESOURCES.getString("edge_constraints.noteEdge.text"), !( pEdge.getClass() == NoteEdge.class && 
 						!((pStart.getClass() == NoteNode.class && pEnd.getClass() == PointNode.class) ||
-								(pEnd.getClass() == NoteNode.class)));
+								(pEnd.getClass() == NoteNode.class))));
+			return outputHashmap;
+		};
 		
 	}
 	
@@ -58,11 +66,14 @@ public final class EdgeConstraints
 	{
 		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram)->
 		{
+			HashMap<String, Boolean> outputHashmap  = new HashMap<String,Boolean>();
 			if( pStart.getClass() == NoteNode.class || pEnd.getClass() == NoteNode.class )
 			{
-				return pEdge.getClass() == NoteEdge.class;
+				outputHashmap.put(RESOURCES.getString("edge_constraints.noteNode.text"),pEdge.getClass() == NoteEdge.class);
+				return outputHashmap;
 			}
-			return true;
+			outputHashmap.put(RESOURCES.getString("edge_constraints.noteNode.text"), true);
+			return outputHashmap;
 		};
 	}
 	
@@ -74,7 +85,9 @@ public final class EdgeConstraints
 		assert pNumber > 0;
 		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram)->
 		{
-			return numberOfEdges(pEdge.getClass(), pStart, pEnd, pDiagram) <= pNumber-1;
+			HashMap<String, Boolean> outputHashmap  = new HashMap<String,Boolean>();
+			outputHashmap.put(RESOURCES.getString("edge_constraints.maxEdges.text"), numberOfEdges(pEdge.getClass(), pStart, pEnd, pDiagram) <= pNumber-1);
+			return outputHashmap;
 		};
 	}
 	
@@ -83,7 +96,13 @@ public final class EdgeConstraints
 	 */
 	public static Constraint noSelfEdge()
 	{
-		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram)-> { return pStart != pEnd; };
+		HashMap<String, Boolean> outputHashmap  = new HashMap<String,Boolean>();
+		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram)-> { 
+			
+			outputHashmap.put(RESOURCES.getString("edge_constraints.noSelfEdge.text"), pStart != pEnd); 
+			return outputHashmap;
+			
+		};
 	}
 
 	/*

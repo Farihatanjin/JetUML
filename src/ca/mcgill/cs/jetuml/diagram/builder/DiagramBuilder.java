@@ -66,6 +66,8 @@ public abstract class DiagramBuilder
 	
 	protected final Diagram aDiagram;
 	private Dimension aCanvasDimension = new Dimension(DEFAULT_DIMENSION, DEFAULT_DIMENSION);
+	private String failedConstraint;
+	
 	
 	/**
 	 * Creates a builder for pDiagram.
@@ -136,7 +138,13 @@ public abstract class DiagramBuilder
 		}
 		
 
-		return getEdgeConstraints().satisfied(pEdge, startNode.get(), endNode.get(), pStart, pEnd, aDiagram);
+		if(getEdgeConstraints().satisfied(pEdge, startNode.get(), endNode.get(), pStart, pEnd, aDiagram).containsValue(false)){
+			failedConstraint = (String) getEdgeConstraints().satisfied(pEdge, startNode.get(), endNode.get(), pStart, pEnd, aDiagram).keySet().toArray()[0];
+			return false;
+		}
+		else {
+			return true;
+		}
 		
 	}
 	
@@ -520,5 +528,12 @@ public abstract class DiagramBuilder
 		Rectangle bounds = NodeViewerRegistry.getBounds(pNode);
 		Point position = computePosition(bounds, pRequestedPosition);
 		pNode.translate(position.getX() - bounds.getX(), position.getY() - bounds.getY());
+	}
+	
+	/**
+	 * @return 
+	 */
+	public String getFailedConstraint() {
+		return failedConstraint;
 	}
 }

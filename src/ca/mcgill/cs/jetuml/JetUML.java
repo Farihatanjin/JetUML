@@ -29,6 +29,7 @@ import java.util.Optional;
 
 import ca.mcgill.cs.jetuml.application.UserPreferences;
 import ca.mcgill.cs.jetuml.application.Version;
+import ca.mcgill.cs.jetuml.diagram.builder.constraints.ConstraintSet;
 import ca.mcgill.cs.jetuml.geom.Rectangle;
 import ca.mcgill.cs.jetuml.gui.EditorFrame;
 import ca.mcgill.cs.jetuml.gui.GuiUtils;
@@ -81,7 +82,8 @@ public final class JetUML extends Application
 		{
 			new TipDialog(pStage).show();
 		}
-	}
+	   
+		}
 	
 	// If the first argument passed to the application is a valid file, open it.
 	private Optional<File> openWith()

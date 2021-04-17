@@ -21,9 +21,11 @@
 
 package ca.mcgill.cs.jetuml.diagram.builder.constraints;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,7 +50,10 @@ public class TestConstraintSet
 		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram)->
 		{
 			aMessages.add(pMessage);
-			return pReturn;
+			
+			HashMap<String,Boolean> outputHashmap = new HashMap<String,Boolean>();
+			outputHashmap.put(pMessage,pReturn);
+			return outputHashmap;
 		};
 	}
 	
@@ -63,27 +68,27 @@ public class TestConstraintSet
 	public void testEmpty()
 	{
 		ConstraintSet constraints = new ConstraintSet();
-		assertTrue(constraints.satisfied(aEdge1, new ClassNode(), new ClassNode(), new Point(0,0), new Point(0,0), new Diagram(DiagramType.CLASS)));
+		assertTrue((boolean)constraints.satisfied(aEdge1, new ClassNode(), new ClassNode(), new Point(0,0), new Point(0,0), new Diagram(DiagramType.CLASS)).values().toArray()[0]);
 	}
 
 	@Test
 	public void testSatisfiedAllFalse()
 	{
 		ConstraintSet set1 = new ConstraintSet(constraint("X", false), constraint("Y", false), constraint("Z", false));
-		assertFalse(set1.satisfied(aEdge1, new ClassNode(), new ClassNode(), new Point(0,0), new Point(0,0), new Diagram(DiagramType.CLASS)));
+		assertFalse((boolean)set1.satisfied(aEdge1, new ClassNode(), new ClassNode(), new Point(0,0), new Point(0,0), new Diagram(DiagramType.CLASS)).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testSatisfiedSomeFalse()
 	{
 		ConstraintSet set1 = new ConstraintSet(constraint("X", true), constraint("Y", true), constraint("Z", false));
-		assertFalse(set1.satisfied(aEdge1, new ClassNode(), new ClassNode(), new Point(0,0), new Point(0,0), new Diagram(DiagramType.CLASS)));
+		assertFalse((boolean)set1.satisfied(aEdge1, new ClassNode(), new ClassNode(), new Point(0,0), new Point(0,0), new Diagram(DiagramType.CLASS)).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testSatisfiedTrue()
 	{
 		ConstraintSet set1 = new ConstraintSet(constraint("X", true), constraint("Y", true), constraint("Z", true));
-		assertTrue(set1.satisfied(aEdge1, new ClassNode(), new ClassNode(), new Point(0,0), new Point(0,0), new Diagram(DiagramType.CLASS)));
+		assertTrue((boolean)set1.satisfied(aEdge1, new ClassNode(), new ClassNode(), new Point(0,0), new Point(0,0), new Diagram(DiagramType.CLASS)).values().toArray()[0]);
 	}
 }

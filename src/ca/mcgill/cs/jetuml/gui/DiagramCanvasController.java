@@ -22,6 +22,7 @@ package ca.mcgill.cs.jetuml.gui;
 
 import static ca.mcgill.cs.jetuml.diagram.DiagramType.viewerFor;
 
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -48,8 +49,11 @@ import ca.mcgill.cs.jetuml.geom.Line;
 import ca.mcgill.cs.jetuml.geom.Point;
 import ca.mcgill.cs.jetuml.geom.Rectangle;
 import ca.mcgill.cs.jetuml.views.Grid;
+import javafx.animation.PauseTransition;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * An instance of this class is responsible to handle the user
@@ -73,7 +77,9 @@ public class DiagramCanvasController
 	private Point aMouseDownPoint;  
 	private DiagramOperationProcessor aProcessor = new DiagramOperationProcessor();
 	private MouseDraggedGestureHandler aHandler;
+	private final Text failedConstraintError = new Text(); 
 	
+
 	/**
 	 * Creates a new controller.
 	 * @param pCanvas The canvas being controlled
@@ -481,6 +487,14 @@ public class DiagramCanvasController
 				aSelectionModel.set(newEdge);
 				aCanvas.paintPanel();
 			}
+			else {
+
+				failedConstraintError.setText(aDiagramBuilder.getFailedConstraint());
+				PauseTransition pause = new PauseTransition(Duration.seconds(10));
+				pause.setOnFinished(e -> failedConstraintError.setText(null));
+				pause.play();
+			} 
+			
 		}
 		aSelectionModel.deactivateRubberband();
 	}
@@ -586,4 +600,9 @@ public class DiagramCanvasController
 		selectedNodes.forEach(node -> aCanvas.getDiagram().placeOnTop(node));
 		aCanvas.paintPanel();
 	}
+	
+	public Text getFailedConstraintError() {
+		return failedConstraintError;
+	}
+	
 }

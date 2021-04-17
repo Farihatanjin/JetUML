@@ -64,10 +64,13 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -89,6 +92,7 @@ public class EditorFrame extends BorderPane
 	private Menu aRecentFilesMenu;
 	private WelcomeTab aWelcomeTab;
 	
+
 	/**
 	 * Constructs a blank frame with a desktop pane but no diagram window.
 	 * 
@@ -97,9 +101,12 @@ public class EditorFrame extends BorderPane
 	 */
 	public EditorFrame(Stage pMainStage, Optional<File> pOpenWith) 
 	{
+		
+		
 		aMainStage = pMainStage;
 		aRecentFiles.deserialize(Preferences.userNodeForPackage(JetUML.class).get("recent", "").trim());
 
+		
 		MenuBar menuBar = new MenuBar();
 		setTop(menuBar);
 		
@@ -133,6 +140,8 @@ public class EditorFrame extends BorderPane
 				getSelectedDiagramTab().keyTyped(e.getCharacter());
 			}
 		});
+		
+		
 	}
 	
 	/* Returns the subset of pDesiredFormats for which a registered image writer 
@@ -734,4 +743,6 @@ public class EditorFrame extends BorderPane
 		tabs().remove(pTab);
 		showWelcomeTabIfNecessary();
 	}
+
+
 }

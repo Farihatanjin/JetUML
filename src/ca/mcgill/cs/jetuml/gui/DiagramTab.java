@@ -38,7 +38,9 @@ import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 
 /**
  * A tab holding a single diagram.
@@ -55,6 +57,7 @@ public class DiagramTab extends Tab implements MouseDraggedGestureHandler, KeyEv
 	private DiagramCanvas aDiagramCanvas;
 	private final DiagramCanvasController aDiagramCanvasController;
 	private Optional<File> aFile = Optional.empty(); // The file associated with this diagram
+	//private Text errorMessage = new Text();
 	
 	/**
      * Constructs a diagram tab initialized with pDiagram.
@@ -73,6 +76,10 @@ public class DiagramTab extends Tab implements MouseDraggedGestureHandler, KeyEv
 		
 		BorderPane layout = new BorderPane();
 		layout.setRight(sideBar);
+		
+		HBox statusBar = new HBox();
+		statusBar.getChildren().add(aDiagramCanvasController.getFailedConstraintError());
+		layout.setBottom(statusBar);
 
 		// We put the diagram in a fixed-size StackPane for the sole purpose of being able to
 		// decorate it with CSS. The StackPane needs to have a fixed size so the border fits the 

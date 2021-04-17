@@ -20,6 +20,9 @@
  *******************************************************************************/
 
 package ca.mcgill.cs.jetuml.diagram.builder.constraints;
+import static ca.mcgill.cs.jetuml.application.ApplicationResources.RESOURCES;
+
+import java.util.HashMap;
 
 import ca.mcgill.cs.jetuml.diagram.Diagram;
 import ca.mcgill.cs.jetuml.diagram.Edge;
@@ -37,7 +40,7 @@ import ca.mcgill.cs.jetuml.geom.Point;
 public final class ClassDiagramEdgeConstraints
 {
 	private ClassDiagramEdgeConstraints() {}
-	
+
 	/*
 	 * Self edges are not allowed for Generalization edges.
 	 */
@@ -45,7 +48,11 @@ public final class ClassDiagramEdgeConstraints
 	{
 		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram)-> 
 		{
-			return !( pEdge.getClass() == GeneralizationEdge.class && pStart == pEnd );
+			HashMap<String, Boolean> outputHashmap  = new HashMap<String,Boolean>();
+			
+			outputHashmap.put(RESOURCES.getString("classdiagram_edge_constraints.noSelfGeneralization.text"),!( pEdge.getClass() == GeneralizationEdge.class && pStart == pEnd ));
+			
+			return outputHashmap;
 		};
 	}
 	
@@ -56,7 +63,11 @@ public final class ClassDiagramEdgeConstraints
 	{
 		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram) ->
 		{
-			return !( pEdge.getClass() == DependencyEdge.class && pStart == pEnd );
+			HashMap<String, Boolean> outputHashmap  = new HashMap<String,Boolean>();
+			
+			outputHashmap.put(RESOURCES.getString("classdiagram_edge_constraints.noSelfDependency.text"),!( pEdge.getClass() == DependencyEdge.class && pStart == pEnd ));
+			
+			return outputHashmap;
 		};
 	}
 	
@@ -67,18 +78,23 @@ public final class ClassDiagramEdgeConstraints
 	{
 		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram) ->
 		{
+			HashMap<String, Boolean> outputHashmap  = new HashMap<String,Boolean>();
+			
 			if( pEdge.getClass() != pEdgeType )
 			{
-				return true;
+				outputHashmap.put(RESOURCES.getString("classdiagram_edge_constraints.noDirectCycles.text"), true);
+				return outputHashmap;
 			}
 			for( Edge edge : pStart.getDiagram().get().edgesConnectedTo(pStart) )
 			{
 				if( edge.getClass() == pEdgeType && edge.getEnd() == pStart && edge.getStart() == pEnd )
 				{
-					return false;
+					outputHashmap.put(RESOURCES.getString("classdiagram_edge_constraints.noDirectCycles.text"), false);
+					return outputHashmap;
 				}
 			}
-			return true;
+			outputHashmap.put(RESOURCES.getString("classdiagram_edge_constraints.noDirectCycles.text"), true);
+			return outputHashmap;
 		};
 	}
 	
@@ -89,9 +105,12 @@ public final class ClassDiagramEdgeConstraints
 	{
 		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram) ->
 		{
+			HashMap<String, Boolean> outputHashmap  = new HashMap<String,Boolean>();
+			
 			if( pEdge.getClass() != AssociationEdge.class && pEdge.getClass() != AggregationEdge.class )
 			{
-				return true;
+				outputHashmap.put(RESOURCES.getString("classdiagram_edge_constraints.noCombinedAssociationAggregation.text"), true);
+				return outputHashmap;
 			}
 			for( Edge edge : pStart.getDiagram().get().edgesConnectedTo(pStart) )
 			{
@@ -100,10 +119,12 @@ public final class ClassDiagramEdgeConstraints
 				boolean sameInOtherDirection = edge.getStart() == pEnd && edge.getEnd() == pStart;
 				if( targetEdge && (sameInOneDirection || sameInOtherDirection))
 				{
-					return false;
+					outputHashmap.put(RESOURCES.getString("classdiagram_edge_constraints.noCombinedAssociationAggregation.text"), false);
+					return outputHashmap;
 				}
 			}
-			return true;
+			outputHashmap.put(RESOURCES.getString("classdiagram_edge_constraints.noCombinedAssociationAggregation.text"), true);
+			return outputHashmap;
 		};
 	}
 }

@@ -21,6 +21,8 @@
 
 package ca.mcgill.cs.jetuml.diagram.builder.constraints;
 
+import java.util.HashMap;
+
 import ca.mcgill.cs.jetuml.diagram.Diagram;
 import ca.mcgill.cs.jetuml.diagram.Edge;
 import ca.mcgill.cs.jetuml.diagram.Node;
@@ -29,7 +31,7 @@ import ca.mcgill.cs.jetuml.diagram.edges.ObjectReferenceEdge;
 import ca.mcgill.cs.jetuml.diagram.nodes.FieldNode;
 import ca.mcgill.cs.jetuml.diagram.nodes.ObjectNode;
 import ca.mcgill.cs.jetuml.geom.Point;
-
+import static ca.mcgill.cs.jetuml.application.ApplicationResources.RESOURCES;
 /**
  * Methods to create edge addition constraints that only apply to
  * state diagrams. CSOFF:
@@ -37,7 +39,7 @@ import ca.mcgill.cs.jetuml.geom.Point;
 public final class ObjectDiagramEdgeConstraints
 {
 	private ObjectDiagramEdgeConstraints() {}
-	
+
 	/*
 	 * A collaboration edge can only be between two object nodes
 	 */
@@ -45,8 +47,10 @@ public final class ObjectDiagramEdgeConstraints
 	{
 		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram)->
 		{
-			return !(pEdge.getClass() == ObjectCollaborationEdge.class && 
-					(pStart.getClass() != ObjectNode.class || pEnd.getClass() != ObjectNode.class));
+			HashMap<String, Boolean> outputHashmap  = new HashMap<String,Boolean>();
+			outputHashmap.put(RESOURCES.getString("objectdiagram_edge_constraints.collaboration.text"), !(pEdge.getClass() == ObjectCollaborationEdge.class && 
+					(pStart.getClass() != ObjectNode.class || pEnd.getClass() != ObjectNode.class)));
+			return outputHashmap;
 		};
 	}
 	
@@ -57,8 +61,10 @@ public final class ObjectDiagramEdgeConstraints
 	{
 		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram)->
 		{
-			return !(pEdge.getClass() == ObjectReferenceEdge.class &&
-					(pStart.getClass() != FieldNode.class || pEnd.getClass() != ObjectNode.class));
+			HashMap<String, Boolean> outputHashmap  = new HashMap<String,Boolean>();
+			outputHashmap.put(RESOURCES.getString("objectdiagram_edge_constraints.reference.text"),!(pEdge.getClass() == ObjectReferenceEdge.class &&
+					(pStart.getClass() != FieldNode.class || pEnd.getClass() != ObjectNode.class)));
+			return outputHashmap;
 		};
 	}
 }

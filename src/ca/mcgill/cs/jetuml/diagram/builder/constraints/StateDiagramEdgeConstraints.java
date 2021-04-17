@@ -21,6 +21,8 @@
 
 package ca.mcgill.cs.jetuml.diagram.builder.constraints;
 
+import java.util.HashMap;
+
 import ca.mcgill.cs.jetuml.diagram.Diagram;
 import ca.mcgill.cs.jetuml.diagram.Edge;
 import ca.mcgill.cs.jetuml.diagram.Node;
@@ -28,7 +30,7 @@ import ca.mcgill.cs.jetuml.diagram.edges.NoteEdge;
 import ca.mcgill.cs.jetuml.diagram.nodes.FinalStateNode;
 import ca.mcgill.cs.jetuml.diagram.nodes.InitialStateNode;
 import ca.mcgill.cs.jetuml.geom.Point;
-
+import static ca.mcgill.cs.jetuml.application.ApplicationResources.RESOURCES;
 /**
  * Methods to create edge addition constraints that only apply to
  * state diagrams. CSOFF:
@@ -44,7 +46,9 @@ public final class StateDiagramEdgeConstraints
 	{
 		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram)->
 		{
-			return pEnd.getClass() != InitialStateNode.class;
+			HashMap<String, Boolean> OUTPUT  = new HashMap<String,Boolean>();
+			OUTPUT.put(RESOURCES.getString("statediagram_edge_constraints.noEdgeToInitialNode.text"),pEnd.getClass() != InitialStateNode.class);
+			return OUTPUT;
 		};
 	}
 	
@@ -55,7 +59,9 @@ public final class StateDiagramEdgeConstraints
 	{
 		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram)->
 		{
-			return !(pStart.getClass() == FinalStateNode.class && pEdge.getClass() != NoteEdge.class );
+			HashMap<String, Boolean> OUTPUT  = new HashMap<String,Boolean>();
+			OUTPUT.put(RESOURCES.getString("statediagram_edge_constraints.noEdgeFromFinalNode.text"), !(pStart.getClass() == FinalStateNode.class && pEdge.getClass() != NoteEdge.class ));
+			return OUTPUT;
 		};
 	}
 }

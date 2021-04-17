@@ -21,6 +21,7 @@
 
 package ca.mcgill.cs.jetuml.diagram.builder.constraints;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -75,34 +76,39 @@ public class TestStateDiagramEdgeConstraints
 	public void testNoEdgeToInitialNodeFalse()
 	{
 		createDiagram();
-		assertFalse(StateDiagramEdgeConstraints.noEdgeToInitialNode().satisfied(aEdge, aState, aInitialNode, aPoint, aPoint, aDiagram));
+		assertEquals("No edges are allowed into an Initial Node.",(String)StateDiagramEdgeConstraints.noEdgeToInitialNode().satisfied(aEdge, aState, aInitialNode, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)StateDiagramEdgeConstraints.noEdgeToInitialNode().satisfied(aEdge, aState, aInitialNode, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testNoEdgeToInitialNodeTrue()
 	{
 		createDiagram();
-		assertTrue(StateDiagramEdgeConstraints.noEdgeToInitialNode().satisfied(aEdge, aInitialNode, aState, aPoint, aPoint, aDiagram));
+		assertEquals("No edges are allowed into an Initial Node.",(String)StateDiagramEdgeConstraints.noEdgeToInitialNode().satisfied(aEdge, aInitialNode, aState, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)StateDiagramEdgeConstraints.noEdgeToInitialNode().satisfied(aEdge, aInitialNode, aState, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testNoEdgeFromFinalNodeInapplicableEdge()
 	{
 		createDiagram();
-		assertTrue(StateDiagramEdgeConstraints.noEdgeFromFinalNode().satisfied(new NoteEdge(), aFinalNode, aState, aPoint, aPoint, aDiagram));
+		assertEquals("The only edge allowed out of a FinalNode is a NoteEdge.",(String)StateDiagramEdgeConstraints.noEdgeFromFinalNode().satisfied(new NoteEdge(), aFinalNode, aState, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)StateDiagramEdgeConstraints.noEdgeFromFinalNode().satisfied(new NoteEdge(), aFinalNode, aState, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testNoEdgeFromFinalNodeApplicableEdgeFalse()
 	{
 		createDiagram();
-		assertFalse(StateDiagramEdgeConstraints.noEdgeFromFinalNode().satisfied(aEdge, aFinalNode, aState, aPoint, aPoint, aDiagram));
+		assertEquals("The only edge allowed out of a FinalNode is a NoteEdge.",(String)StateDiagramEdgeConstraints.noEdgeFromFinalNode().satisfied(aEdge, aFinalNode, aState, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertFalse((boolean)StateDiagramEdgeConstraints.noEdgeFromFinalNode().satisfied(aEdge, aFinalNode, aState, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 	
 	@Test
 	public void testNoEdgeFromFinalNodeApplicableEdgeTrue()
 	{
 		createDiagram();
-		assertTrue(StateDiagramEdgeConstraints.noEdgeFromFinalNode().satisfied(aEdge, aState, aState, aPoint, aPoint, aDiagram));
+		assertEquals("The only edge allowed out of a FinalNode is a NoteEdge.",(String)StateDiagramEdgeConstraints.noEdgeFromFinalNode().satisfied(aEdge, aState, aState, aPoint, aPoint, aDiagram).keySet().toArray()[0]);
+		assertTrue((boolean)StateDiagramEdgeConstraints.noEdgeFromFinalNode().satisfied(aEdge, aState, aState, aPoint, aPoint, aDiagram).values().toArray()[0]);
 	}
 }

@@ -21,6 +21,8 @@
 
 package ca.mcgill.cs.jetuml.diagram.builder.constraints;
 
+import java.util.HashMap;
+
 import ca.mcgill.cs.jetuml.diagram.ControlFlow;
 import ca.mcgill.cs.jetuml.diagram.Diagram;
 import ca.mcgill.cs.jetuml.diagram.Edge;
@@ -31,7 +33,7 @@ import ca.mcgill.cs.jetuml.diagram.nodes.CallNode;
 import ca.mcgill.cs.jetuml.diagram.nodes.ImplicitParameterNode;
 import ca.mcgill.cs.jetuml.geom.Point;
 import ca.mcgill.cs.jetuml.viewers.nodes.ImplicitParameterNodeViewer;
-
+import static ca.mcgill.cs.jetuml.application.ApplicationResources.RESOURCES;
 /**
  * Methods to create edge addition constraints that only apply to
  * state diagrams. CSOFF:
@@ -49,8 +51,10 @@ public final class SequenceDiagramEdgeConstraints
 	{
 		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram)->
 		{
-			return !(pStart.getClass() == ImplicitParameterNode.class && 
-					IMPLICIT_PARAMETER_NODE_VIEWER.getTopRectangle(pStart).contains(pStartPoint));
+			HashMap<String, Boolean> OUTPUT  = new HashMap<String,Boolean>();
+			OUTPUT.put(RESOURCES.getString("sequencediagram_edge_constraints.noEdgesFromParameterTop.text"), !(pStart.getClass() == ImplicitParameterNode.class && 
+					IMPLICIT_PARAMETER_NODE_VIEWER.getTopRectangle(pStart).contains(pStartPoint)));
+			return OUTPUT;
 		};
 	}
 	
@@ -64,12 +68,14 @@ public final class SequenceDiagramEdgeConstraints
 		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram)->
 		{
 			ControlFlow flow = new ControlFlow(pDiagram);
-			return !(pEdge.getClass() == ReturnEdge.class && 
+			HashMap<String, Boolean> OUTPUT  = new HashMap<String,Boolean>();
+			OUTPUT.put(RESOURCES.getString("sequencediagram_edge_constraints.returnEdge.text"),!(pEdge.getClass() == ReturnEdge.class && 
 					(pStart.getClass() != CallNode.class ||
 					 pEnd.getClass() != CallNode.class ||
 					 !flow.getCaller(pStart).isPresent() ||
 					 pEnd != flow.getCaller(pStart).get() ||
-					 pStart.getParent() == pEnd.getParent()));
+					 pStart.getParent() == pEnd.getParent())));
+			return OUTPUT;
 		};
 	}
 	
@@ -81,13 +87,18 @@ public final class SequenceDiagramEdgeConstraints
 	{
 		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram)->
 		{
-			return !(pEdge.getClass() == CallEdge.class && 
+			HashMap<String, Boolean> OUTPUT  = new HashMap<String,Boolean>();
+			OUTPUT.put(RESOURCES.getString("sequencediagram_edge_constraints.callEdgeEnd.text"),!(pEdge.getClass() == CallEdge.class && 
 					 pEnd.getClass() == ImplicitParameterNode.class &&
 							 IMPLICIT_PARAMETER_NODE_VIEWER.getTopRectangle(pEnd).contains(pEndPoint) && 
-							 	!canCreateConstructor(pStart, pEnd, pDiagram, pEndPoint));
+							 	!canCreateConstructor(pStart, pEnd, pDiagram, pEndPoint)));
+			return OUTPUT;
 		};
 	}
 	
+	/*
+	 * Check if it is allowed to create a constructor.
+	 */
 	private static boolean canCreateConstructor(Node pStartNode, Node pEndNode, Diagram pDiagram, Point pEndPoint)
 	{
 		return 	(pStartNode instanceof ImplicitParameterNode || pStartNode instanceof CallNode) && 
@@ -102,9 +113,11 @@ public final class SequenceDiagramEdgeConstraints
 	{
 		return (Edge pEdge, Node pStart, Node pEnd, Point pStartPoint, Point pEndPoint, Diagram pDiagram)->
 		{
-			return !(pEdge.getClass() == CallEdge.class && 
+			HashMap<String, Boolean> OUTPUT  = new HashMap<String,Boolean>();
+			OUTPUT.put(RESOURCES.getString("sequencediagram_edge_constraints.singleEntryPoint.text"),!(pEdge.getClass() == CallEdge.class && 
 					pStart.getClass() == ImplicitParameterNode.class &&
-					new ControlFlow(pDiagram).hasEntryPoint());
+					new ControlFlow(pDiagram).hasEntryPoint()));
+			return OUTPUT;
 		};
 	}
 }
